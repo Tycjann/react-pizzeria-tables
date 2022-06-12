@@ -5,8 +5,6 @@ export const Config = {
 
 export const FormErrorsMessages = {
   thisFieldRequired: 'This field is required',
-  minLength03: 'Minimum 3 characters',
-  minLength20: 'Minimum 20 characters',
 };
 
 export const StatusListStorage = [

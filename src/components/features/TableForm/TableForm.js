@@ -17,7 +17,6 @@ const TableForm = props => {
     
   };
 
-  // if category is cleaning or free then clean peopleAmount
   const onChangeCategory = id => {
     if (id !== 'busy') {
       setPeopleAmount('');
