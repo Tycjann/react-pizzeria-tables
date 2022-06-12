@@ -18,11 +18,29 @@ export const addTable = payload => ({ type: ADD_TABLE, payload });
 export const editTable = payload => ({ type: EDIT_TABLE, payload });
 export const removeTable = payload => ({ type: REMOVE_TABLE, payload });
 export const updateTables = payload => ({ type: UPDATE_TABLES, payload });
-export const fetchTables = dispatch => {
-  fetch('http://localhost:3131/tables')
-    .then(res => res.json())
-    .then(tables => dispatch(updateTables(tables)));
-}
+export const fetchTables = () => {
+  return (dispatch) => {
+    fetch('http://localhost:3131/tables')
+      .then(res => res.json())
+      .then(tables => dispatch(updateTables(tables)));
+  };
+};
+
+// https://youtu.be/wmmTOT8tL68
+export const addTableRequest = (newTable) => {
+  return (dispatch) => {
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newTable),
+    };
+
+    fetch('http://localhost:3131/tables', options)
+      .then(() => dispatch(addTable(newTable)))
+  };
+};
 
 
 const postsReducer = (statePart = [], action) => {
