@@ -1,7 +1,12 @@
 import { Col, Row } from 'react-bootstrap';
-import TableRow from '../../features/TableRow/TableRow.js'
+import TableRow from '../../features/TableRow/TableRow.js';
+import { getLoading } from '../../../redux/loadingRedux';
+import { useSelector } from 'react-redux';
+import Loader from "../../features/Loader/Loader";
 
 const Home = () => {
+
+  const loading = useSelector(getLoading);
 
   return (
     <>
@@ -10,10 +15,8 @@ const Home = () => {
           <h1 className="display-6">All tables</h1>
         </Col>
       </Row>
-      <TableRow/>
-      <TableRow/>
-      <TableRow/>
-    </>
+      {loading ? <Loader /> : <TableRow />}
+    </> 
   );
 };
 

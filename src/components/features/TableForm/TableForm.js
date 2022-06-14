@@ -1,20 +1,20 @@
 import { Row, Col, Form, Button, InputGroup } from 'react-bootstrap';
-import { Config, StatusListStorage, FormErrorsMessages } from '../../../settings/settings'
+import { Config, FormErrorsMessages } from '../../../settings/settings'
 import ErrorTextValidate from '../../common/ErrorTextValidate/ErrorTextValidate'
 import { useForm } from "react-hook-form";
 import { useState } from 'react';
 import ConditionRenderer from '../../common/ConditionRenderer/ConditionRenderer';
 
-const TableForm = props => {
+const TableForm = ({ action, ...props }) => {
 
   const { register, handleSubmit: validate, formState: { errors } } = useForm();
-  const [categoryId, setCategoryId] = useState(props.categoryId || '');
+  const [status, setStatus] = useState(props.status || '');
   const [peopleAmount, setPeopleAmount] = useState(props.peopleAmount || Config.peopleAmountMini);
-  const [peopleAmountMax, setPeopleAmountMax] = useState(props.peopleAmount || Config.peopleAmountMax);
+  const [peopleAmountMax, setPeopleAmountMax] = useState(props.peopleAmountMax || Config.peopleAmountMax);
   const [bill, setBill] = useState(props.bill || '');
 
   const handleSubmit = () => {
-    
+    action({ status, peopleAmount, peopleAmountMax, bill });
   };
 
   const onChangeCategory = id => {
@@ -22,15 +22,17 @@ const TableForm = props => {
       setPeopleAmount('');
       setPeopleAmountMax(Config.peopleAmountMax);
     }
-    setCategoryId(id);
+    setStatus(id);
   };
+
+  // console.log('errors', errors);
 
   const onChangePeopleAmount = value => {
     if (parseInt(value) > parseInt(Config.peopleAmountMax)) value = Config.peopleAmountMax;
     else if (parseInt(value) < parseInt(Config.peopleAmountMini)) value = Config.peopleAmountMini;
     if (parseInt(value) > parseInt(peopleAmountMax)) value = peopleAmountMax;
 
-    setPeopleAmount(parseInt(value));
+    setPeopleAmount(value);
   };
 
   const onChangePeopleAmountMax = value => {
@@ -56,27 +58,27 @@ const TableForm = props => {
         <Col sm={1} className="ps-3 fw-bold">
           <Form.Label 
             className="pt-2 align-baseline"
-            htmlFor="categoryId"
+            htmlFor="status"
           >
             Status:</Form.Label>
           </Col>
         <Col sm={4}>
           <Form.Select
-            {...register("categoryId", {
+            {...register("status", {
               required: true,
             })}
             aria-label="Select category..."
-            id="categoryId"
-            name="categoryId"
-            value={categoryId}
+            id="status"
+            name="status"
+            value={status}
             onChange={e => onChangeCategory(e.target.value)}
           >
             <option value="">Select status...</option>
-            {StatusListStorage.map(status =>
+            {Config['status'].map(status =>
               <option key={"" + status.id + ""} value={"" + status.id + ""}>{status.name}</option>
             )}
           </Form.Select>
-          {errors.categoryId && <ErrorTextValidate text={FormErrorsMessages.thisFieldRequired} />}
+          {errors.status && <ErrorTextValidate text={FormErrorsMessages.thisFieldRequired} />}
         </Col>
       </Row>
 
@@ -94,7 +96,7 @@ const TableForm = props => {
               <Form.Control
                 {...register("peopleAmount", {
                   required: true,
-                  min: 1,
+                  min: 1
                 })}
                 className="text-center"
                 aria-label="People min"
@@ -159,7 +161,7 @@ const TableForm = props => {
         </Col>
       </Row>
 
-      <ConditionRenderer condition={categoryId === 'busy'}>
+      <ConditionRenderer condition={status === 'busy'}>
         <Row className="mb-2 mt-2 justify-content-md-center">
           <Col sm={1} className="ps-3 fw-bold">
             <Form.Label 
@@ -170,22 +172,23 @@ const TableForm = props => {
             </Form.Label>
           </Col>
           <Col sm={4}>
-            <InputGroup className="mb-3">
-              <InputGroup.Text id="basic-addon1">$</InputGroup.Text>
-              <Form.Control
-                {...register("bill", {
-                  required: true,
-                  min: 1,
-                })}
-                aria-label="Bill"
-                type="number"
-                id="bill"
-                name="bill"
-                value={bill}
-                onChange={e => setBill(e.target.value)}
-              />
-            </InputGroup>
-            
+            {status === 'busy' &&
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">$</InputGroup.Text>
+                <Form.Control
+                  {...register("bill", {
+                    required: true,
+                    min: 1,
+                  })}
+                  aria-label="Bill"
+                  type="number"
+                  id="bill"
+                  name="bill"
+                  value={bill}
+                  onChange={e => setBill(e.target.value)}
+                />
+              </InputGroup>
+            }
             {errors.bill
               && errors.bill.type === "required"
               && <ErrorTextValidate text={FormErrorsMessages.thisFieldRequired} />}

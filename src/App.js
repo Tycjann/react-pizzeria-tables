@@ -4,7 +4,7 @@ import Header from "./components/features/Header/Header";
 import Footer from "./components/features/Footer/Footer";
 import NotFound from "./components/pages/NotFound/NotFound";
 import Home from "./components/pages/Home/Home";
-import Table from "./components/pages/Table/Table";
+import EditTableForm from "./components/pages/EditTableForm/EditTableForm";
 import { fetchTables } from './redux/tablesRedux';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react'; 
@@ -18,7 +18,7 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/table/:id" element={<Table />} />
+        <Route path="/table/:id" element={<EditTableForm />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
