@@ -1,3 +1,5 @@
+export const API_URL = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:3131/api';
+
 export const Config = {
   peopleAmountMini: 0,
   peopleAmountMax: 10,

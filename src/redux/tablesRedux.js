@@ -1,5 +1,6 @@
 import {nanoid} from 'nanoid';
 import { updateLoading } from './loadingRedux';
+import { API_URL } from '../settings/settings'
 
 
 // selectors
@@ -25,7 +26,7 @@ export const updateTables = payload => ({ type: UPDATE_TABLES, payload });
 export const fetchTables = () => {
   return (dispatch) => {
     dispatch(updateLoading(true));
-    fetch('http://localhost:3131/tables')
+    fetch(API_URL + '/tables')
       .then(response => {
         if (response.status === 200) {
           return response.json()
@@ -53,7 +54,7 @@ export const editTablesRequest = (editTables) => {
       body: JSON.stringify(editTables)
     };
 
-    fetch('http://localhost:3131/tables/' + editTables.id, options)
+    fetch(API_URL + '/tables/' + editTables.id, options)
       .then(() => dispatch(editTable(editTables)))
   };
 }
